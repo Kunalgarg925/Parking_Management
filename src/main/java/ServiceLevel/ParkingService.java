@@ -1,6 +1,6 @@
 package ServiceLevel;
 
-import DaoLevel.ParkingDatabase;
+import DaoLevel.ParkingRepository;
 import Model.ParkingTicket;
 
 import java.time.Duration;
@@ -10,22 +10,22 @@ import java.util.List;
 import java.util.Scanner;
 import java.util.UUID;
 
-public class ParkingRepository {
+public class ParkingService {
 
     private final int parkingCostPerHour = 20;
     static final ZoneId zone = ZoneId.of("Asia/Kolkata");
-    private final ParkingDatabase parkingDatabase;
-    public ParkingRepository(){
-        this.parkingDatabase = new ParkingDatabase();
+    private final ParkingRepository parkingRepository;
+    public ParkingService(){
+        this.parkingRepository = new ParkingRepository();
     }
 
     public String alotParking(ParkingTicket newCustomer, Integer parkDuration){
         if(newCustomer != null){
-            if(parkingDatabase.getRemainingSlot() > 0){
+            if(parkingRepository.getRemainingSlot() > 0){
                 newCustomer.setEntryTime(LocalDateTime.now(zone));
                 newCustomer.setExitTime(newCustomer.getEntryTime().plusHours(parkDuration));
                 newCustomer.setTicketId(UUID.randomUUID().toString());
-                parkingDatabase.assignParking(newCustomer);
+                parkingRepository.assignParking(newCustomer);
                 return newCustomer.getTicketId();
             }
             throw new RuntimeException("Parking is Full");
@@ -35,13 +35,13 @@ public class ParkingRepository {
 
     public void checkOut(String ticketId){
         if(ticketId != null){
-            ParkingTicket parkingTicket = parkingDatabase.getTicketDetails(ticketId);
+            ParkingTicket parkingTicket = parkingRepository.getTicketDetails(ticketId);
             System.out.println("Ticket Id -> " + ticketId);
             System.out.println("Car Name -> " + parkingTicket.getCarName());
             long totalCost = calculateCost(parkingTicket.getEntryTime(),parkingTicket.getExitTime());
             Boolean customerPayedBill = isCustomerPayBill(totalCost);
             if(customerPayedBill){
-                parkingDatabase.disassociateParking(ticketId);
+                parkingRepository.disassociateParking(ticketId);
             }else{
                 System.out.println("Please Pay Bill Amount");
             }
@@ -69,10 +69,10 @@ public class ParkingRepository {
     }
 
     public int getRemainingSlots(){
-        return parkingDatabase.getRemainingSlot();
+        return parkingRepository.getRemainingSlot();
     }
 
     public List<ParkingTicket> getAllParkingDetails() {
-        return parkingDatabase.getAllList();
+        return parkingRepository.getAllList();
     }
 }

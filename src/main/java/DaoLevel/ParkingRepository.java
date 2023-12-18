@@ -2,14 +2,12 @@ package DaoLevel;
 
 import Model.ParkingTicket;
 
-import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class ParkingDatabase {
+public class ParkingRepository {
     private final Integer parkingMaximumSlot = 100;
     private Integer parkingUsedSlot = 0;
     private final Map<String, ParkingTicket> parkingList = new HashMap<>();
