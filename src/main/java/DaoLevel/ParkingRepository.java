@@ -1,5 +1,6 @@
 package DaoLevel;
 
+import Model.ConstantData;
 import Model.ParkingTicket;
 
 import java.util.ArrayList;
@@ -8,7 +9,7 @@ import java.util.List;
 import java.util.Map;
 
 public class ParkingRepository {
-    private final Integer parkingMaximumSlot = 100;
+    private final Integer parkingMaximumSlot = ConstantData.parkingMaximumSlot;
     private Integer parkingUsedSlot = 0;
     private final Map<String, ParkingTicket> parkingList = new HashMap<>();
 

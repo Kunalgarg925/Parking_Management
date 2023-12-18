@@ -1,6 +1,7 @@
 package ServiceLevel;
 
 import DaoLevel.ParkingRepository;
+import Model.ConstantData;
 import Model.ParkingTicket;
 
 import java.time.Duration;
@@ -12,8 +13,8 @@ import java.util.UUID;
 
 public class ParkingService {
 
-    private final int parkingCostPerHour = 20;
-    static final ZoneId zone = ZoneId.of("Asia/Kolkata");
+    private final int parkingCostPerHour = ConstantData.parkingCostPerHour;
+    static final ZoneId zone = ConstantData.zone;
     private final ParkingRepository parkingRepository;
     public ParkingService(){
         this.parkingRepository = new ParkingRepository();
