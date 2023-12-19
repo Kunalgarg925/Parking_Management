@@ -21,7 +21,7 @@ public class ParkingService {
     }
 
     public String alotParking(ParkingTicket newCustomer, Integer parkDuration){
-        if(newCustomer != null){
+        if(newCustomer != null && parkDuration > 0 && newCustomer.getCarName() != null){
             if(parkingRepository.getRemainingSlot() > 0){
                 newCustomer.setEntryTime(LocalDateTime.now(zone));
                 newCustomer.setExitTime(newCustomer.getEntryTime().plusHours(parkDuration));
@@ -31,7 +31,7 @@ public class ParkingService {
             }
             throw new RuntimeException("Parking is Full");
         }
-        throw new RuntimeException("Invalid Entry");
+        throw new NullPointerException("Invalid Entry");
     }
 
     public void checkOut(String ticketId){
@@ -46,18 +46,21 @@ public class ParkingService {
             }else{
                 System.out.println("Please Pay Bill Amount");
             }
+        }else{
+            throw new NullPointerException("TicketId is null");
         }
     }
 
     private Boolean isCustomerPayBill(long totalCost) {
-        Scanner scan = new Scanner(System.in);
         System.out.println("Total Bill Amount : " + Math.round(totalCost));
-        System.out.print("Enter Amount : ");
-        int paymentReceived = scan.nextInt();
-        if(Math.round(totalCost) == paymentReceived){
-            return true;
-        }
-        return false;
+//        Scanner scan = new Scanner(System.in);
+//        System.out.print("Enter Amount : ");
+//        int paymentReceived = scan.nextInt();
+//        if(Math.round(totalCost) == paymentReceived){
+//            return true;
+//        }
+//        return false;
+        return true;
     }
 
     public long calculateCost(LocalDateTime entryTime, LocalDateTime exitTime){
