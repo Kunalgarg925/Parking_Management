@@ -1,6 +1,6 @@
-import Model.CarType;
-import Model.ParkingTicket;
-import ServiceLevel.ParkingService;
+import model.CarType;
+import model.ParkingTicket;
+import service.ParkingService;
 import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
@@ -32,14 +32,12 @@ public class ParkingManagementTest {
         assertThrows(NullPointerException.class, () -> {parkingService.alotParking(pt2,3);});
         assertThrows(NullPointerException.class, () -> {parkingService.alotParking(pt3,0);});
         assertNotNull(parkingService.alotParking(pt4,3));
-        System.out.println(parkingService.getAllParkingDetails().size());
         assertThrows(RuntimeException.class, () -> {parkingService.alotParking(pt5,1);});
     }
 
     @Test
     void getAllParkingDetails(){
         alotSomeParkings();
-        System.out.println(parkingService.getAllParkingDetails().size());
         assertNotNull(parkingService.getAllParkingDetails());
     }
 
@@ -53,7 +51,7 @@ public class ParkingManagementTest {
     void checkOutCustomerVechile(){
         List<String> ticketIdList = alotSomeParkings();
         assertDoesNotThrow(() ->{parkingService.checkOut(ticketIdList.get(0));});
-        assertThrows(NullPointerException.class, () -> {parkingService.checkOut(null);});
+        assertThrows(RuntimeException.class, () -> {parkingService.checkOut(null);});
     }
 
     private static ParkingTicket createTicket(String carName, CarType carType) {

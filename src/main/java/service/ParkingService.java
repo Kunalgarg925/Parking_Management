@@ -1,33 +1,32 @@
-package ServiceLevel;
+package service;
 
-import DaoLevel.ParkingRepository;
-import Model.ConstantData;
-import Model.ParkingTicket;
+import adapter.ParkingRepository;
+import model.Constants;
+import model.ParkingTicket;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
-import java.util.Scanner;
 import java.util.UUID;
 
 public class ParkingService {
 
-    private final int parkingCostPerHour = ConstantData.parkingCostPerHour;
-    static final ZoneId zone = ConstantData.zone;
+    private final int parkingCostPerHour = Constants.parkingCostPerHour;
+    static final ZoneId zone = Constants.asiaZone;
     private final ParkingRepository parkingRepository;
     public ParkingService(){
         this.parkingRepository = new ParkingRepository();
     }
 
-    public String alotParking(ParkingTicket newCustomer, Integer parkDuration){
-        if(newCustomer != null && parkDuration > 0 && newCustomer.getCarName() != null){
+    public String alotParking(ParkingTicket parkingTicket, Integer parkDurationInHr){
+        if(parkingTicket != null && parkingTicket.getCarName() != null && parkDurationInHr > 0){
             if(parkingRepository.getRemainingSlot() > 0){
-                newCustomer.setEntryTime(LocalDateTime.now(zone));
-                newCustomer.setExitTime(newCustomer.getEntryTime().plusHours(parkDuration));
-                newCustomer.setTicketId(UUID.randomUUID().toString());
-                parkingRepository.assignParking(newCustomer);
-                return newCustomer.getTicketId();
+                parkingTicket.setEntryTime(LocalDateTime.now(zone));
+                parkingTicket.setExitTime(parkingTicket.getEntryTime().plusHours(parkDurationInHr));
+                parkingTicket.setTicketId(UUID.randomUUID().toString());
+                parkingRepository.assignParking(parkingTicket);
+                return parkingTicket.getTicketId();
             }
             throw new RuntimeException("Parking is Full");
         }
@@ -47,19 +46,12 @@ public class ParkingService {
                 System.out.println("Please Pay Bill Amount");
             }
         }else{
-            throw new NullPointerException("TicketId is null");
+            throw new RuntimeException("TicketId is null");
         }
     }
 
     private Boolean isCustomerPayBill(long totalCost) {
         System.out.println("Total Bill Amount : " + Math.round(totalCost));
-//        Scanner scan = new Scanner(System.in);
-//        System.out.print("Enter Amount : ");
-//        int paymentReceived = scan.nextInt();
-//        if(Math.round(totalCost) == paymentReceived){
-//            return true;
-//        }
-//        return false;
         return true;
     }
 

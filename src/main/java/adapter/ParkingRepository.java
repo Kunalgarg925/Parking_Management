@@ -1,7 +1,7 @@
-package DaoLevel;
+package adapter;
 
-import Model.ConstantData;
-import Model.ParkingTicket;
+import model.Constants;
+import model.ParkingTicket;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -9,23 +9,23 @@ import java.util.List;
 import java.util.Map;
 
 public class ParkingRepository {
-    private final Integer parkingMaximumSlot = ConstantData.parkingMaximumSlot;
-    private Integer parkingUsedSlot = 0;
+    private final Integer maximumSlot = Constants.parkingMaximumSlot;
+    private Integer reservedSlots = 0;
     private final Map<String, ParkingTicket> parkingList = new HashMap<>();
 
     public int getRemainingSlot(){
-        return this.parkingMaximumSlot - this.parkingUsedSlot;
+        return this.maximumSlot - this.reservedSlots;
     }
 
-    public void assignParking(ParkingTicket newCustomer) {
-        this.parkingUsedSlot++;
-        this.parkingList.put(newCustomer.getTicketId(), newCustomer);
+    public void assignParking(ParkingTicket parkingTicket) {
+        this.reservedSlots++;
+        this.parkingList.put(parkingTicket.getTicketId(), parkingTicket);
     }
 
     public void disassociateParking(String ticketId){
         if(this.parkingList.containsKey(ticketId)){
             this.parkingList.remove(ticketId);
-            this.parkingUsedSlot--;
+            this.reservedSlots--;
         }
     }
 
@@ -37,6 +37,6 @@ public class ParkingRepository {
     }
 
     public List<ParkingTicket> getAllList() {
-        return new ArrayList<ParkingTicket> (this.parkingList.values());
+        return new ArrayList<>(this.parkingList.values());
     }
 }
